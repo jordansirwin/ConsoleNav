@@ -7,9 +7,9 @@ A C# helper to easily manage navigation and menu's for Console Apps.
 
 ### Usage Example ###
 
-![Example Menu][/demo/demo_1.png]
+![Example Menu](demo/Demo_1.PNG)
 
-```
+``` C#
 using System;
 using JSI;
 
