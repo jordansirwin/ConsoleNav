@@ -2,12 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-// ReSharper disable once CheckNamespace
+/*
+ * https://github.com/jordansirwin/ConsoleNav
+ */
 namespace JSI
 {
     public class ConsoleNav
     {
+        private const string LeftPadding = " ";
         static readonly object LockUiObject = new object();
+
+        public string AskQuestion(string question)
+        {
+            WriteLine("Q) {0}", ConsoleColor.Yellow, question);
+            Write("", ConsoleColor.Gray);
+            return Console.ReadLine();
+        }
 
         public void DrawError(string errorMessage)
         {
@@ -20,7 +30,14 @@ namespace JSI
 
         public void DrawHeader(string title)
         {
-            WriteLine(title, ConsoleColor.Yellow);
+            lock (LockUiObject)
+            {
+                var border = "".PadRight(title.Length + 4, '*');
+                WriteLine(border, ConsoleColor.Black, ConsoleColor.White);
+                WriteLine("* {0} *", ConsoleColor.Black, ConsoleColor.White, title);
+                WriteLine(border, ConsoleColor.Black, ConsoleColor.White);
+                Console.WriteLine();
+            }
         }
 
         public void DrawSubtleText(string text)
@@ -74,6 +91,8 @@ namespace JSI
         {
             lock (LockUiObject)
             {
+                Console.Write(LeftPadding);
+
                 var origBgColor = Console.BackgroundColor;
                 var origColor = Console.ForegroundColor;
 
@@ -89,11 +108,10 @@ namespace JSI
             }
         }
 
-        protected
-            void DrawMenuTitle(string title)
+        protected void DrawMenuTitle(string title)
         {
-            title = string.Format("{0}\r\n{1}", title, "".PadRight(title.Length, '-'));
             WriteLine(title, ConsoleColor.Green);
+            WriteLine("".PadRight(title.Length, '-'), ConsoleColor.Green);
         }
 
         protected void DrawMenu(ConsoleMenu menu)
@@ -179,7 +197,7 @@ namespace JSI
         {
             ExitMenuItem = new ConsoleMenuItem
             {
-                Label = "Quit"
+                Label = "Exit"
             };
         }
     }
